@@ -75,7 +75,14 @@ Vagrant.configure("2") do |config|
     sudo chmod +x /usr/local/bin/docker-compose
     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
     sudo apt-get install -y nodejs
-    echo 'export JAVA_HOME=/usr/lib/jvm/default-java' >> $HOME/.profile
+		wget https://golang.org/dl/go1.15.6.linux-amd64.tar.gz
+		tar -zxvf go1.15.6.linux-amd64.tar.gz -C /usr/local
+		rm -f go1.15.6.linux-amd64.tar.gz
+    echo "export JAVA_HOME=/usr/lib/jvm/default-java" >> .profile
+		echo "export GOROOT=/usr/local/go" >> .profile
+		echo 'export GOPATH=$HOME/go' >> .profile
+		echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> .profile
 		curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.3.0 1.4.9
+		chown -R vagrant:vagrant fabric-samples
   SHELL
 end
