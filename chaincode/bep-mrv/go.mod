@@ -4,5 +4,5 @@ go 1.15
 
 require (
 	github.com/hyperledger/fabric-contract-api-go v1.1.1
-	github.com/hyperledger/fabric-samples/asset-transfer-basic/chaincode-go v0.0.0-20210120153238-14dc7e13160e
+	github.com/hyperledger/fabric-samples/asset-transfer-basic/chaincode-go v0.0.0-20210120153238-14dc7e13160e // indirect
 )

@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.1.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+}
+
+group 'com.woohoon9.bep.mrv'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    customProvidedRuntime
+}
+
+dependencies {
+    customProvidedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.2"
+
+    compileOnly 'org.projectlombok:lombok:1.18.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.6'
+    compile 'org.hyperledger.fabric:fabric-gateway-java:2.1.1'
+
+}
+
+jar {
+    enabled = true
+}
+
+bootJar {
+    classifier = 'boot'
+    mainClassName = 'com.woohoon9.bep.mrv.App'
+}
