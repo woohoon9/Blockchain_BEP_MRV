@@ -1,6 +1,8 @@
 package com.woohoon9.bep.mrv;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woohoon9.bep.mrv.model.Mrv;
 import org.hyperledger.fabric.gateway.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.PublicKey;
+import java.util.HashMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -60,12 +63,29 @@ public class App {
     @Value("${hlf.wallet.user.name}")
     private String walletUserName;
 
-    @RequestMapping(value = "/manager/category", method = RequestMethod.GET)
-    public ResponseEntity<?> getCategories() {
+    @RequestMapping(value = "/mrv", method = RequestMethod.POST)
+    public ResponseEntity<?> createMrv(@RequestBody String id){
+
+        String resultStr = "";
+
+        try {
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("createMrv", id);
+            resultStr = new String(result, UTF_8);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(resultStr, HttpStatus.CREATED);
+
+    }
+
+    @RequestMapping(value = "/mrv/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getMrv(@PathVariable String id){
         String resultStr = "";
 
         try{
-            byte[] result = getContract(channelName, chaincodeName).submitTransaction("getCategories", "");
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetMrv", id);
             resultStr = new String(result, UTF_8);
 
         }catch(Exception e){
@@ -73,7 +93,27 @@ public class App {
         }
 
         return new ResponseEntity<>(resultStr, HttpStatus.OK);
+    }
 
+    @RequestMapping(value = "/mrv/transient", method = RequestMethod.POST)
+    public ResponseEntity<?> createMrvTransient(@RequestBody Mrv mrv) throws JsonProcessingException {
+
+        String resultStr = "";
+
+        logger.info("============================ mrv info ==================================\n" + getMapper().writeValueAsString(mrv)+ "\n========================================================================\n");
+
+        try{
+
+            HashMap<String, byte[]> mrvInput = new HashMap<>();
+            mrvInput.put("createMrv", getMapper().writeValueAsBytes(mrv));
+            byte[] result = getContract(channelName, chaincodeName).createTransaction("CreateMrvByTransient").setTransient(mrvInput).submit();
+            resultStr = new String(result, UTF_8);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(resultStr, HttpStatus.CREATED);
     }
 
 //    @RequestMapping(value = "/manager/product/{id}", method = RequestMethod.GET)
