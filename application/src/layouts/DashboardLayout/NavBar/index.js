@@ -47,12 +47,12 @@ const items = [
     title: 'Building Stakeholder'
   },
   {
-    href: '/app/customers',
+    href: '/app/energyAuditors',
     icon: UserIcon,
     title: 'Energy Savings Auditors'
   },
   {
-    href: '/app/customers',
+    href: '/app/carbonAuditors',
     icon: UserIcon,
     title: 'Carbon Credit Auditors'
   },

@@ -11,6 +11,8 @@ import ProductListView from './views/product/ProductListView';
 import RegisterView from './views/auth/RegisterView';
 import SettingsView from './views/settings/SettingsView';
 import StakeholdersView from './views/stakeholders/StakeHoldersView';
+import EnergyAuditorsView from './views/energyAuditors/EnergyAuditorsView';
+import CarbonAuditorsView from './views/carbonAuditors/CarbonAuditorsView';
 
 const routes = [
   {
@@ -23,6 +25,8 @@ const routes = [
       { path: 'products', element: <ProductListView /> },
       { path: 'settings', element: <SettingsView /> },
       { path: 'stakeholders', element: <StakeholdersView /> },
+      { path: 'energyAuditors', element: <EnergyAuditorsView/> },
+      { path: 'carbonAuditors', element: <CarbonAuditorsView/> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

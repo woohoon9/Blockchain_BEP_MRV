@@ -18,15 +18,22 @@ const useStyles = makeStyles(() => ({
     root: {}
 }));
 
-const BuildingInformation = ({ className, ...rest }) => {
+const DataPage = ({ className, year, type, ...rest }) => {
     const classes = useStyles();
+    const yearName = year + " Year";
     const [values, setValues] = useState({
-        buildingID: 'Building ID',
-        buildingName: 'Building name',
-        buildingNumber: '0',
-        address: 'Building address',
-        substantialCompletion: 'Substantial completion',
-        greenBuildingCertificate: 'Green building certificate'
+        jan: "Jan",
+        feb: "Feb",
+        mar: "Mar",
+        apr: "Apr",
+        may: "May",
+        jun: "Jun",
+        jul: "Jul",
+        aug: "Aug",
+        sep: "Sep",
+        oct: "Oct",
+        nov: "Nov",
+        dec: "Dec"
     });
 
     const handleChange = (event) => {
@@ -74,8 +81,7 @@ const BuildingInformation = ({ className, ...rest }) => {
         >
             <Card>
                 <CardHeader
-                    subheader="The information can be edited"
-                    title="Building Information"
+                    title={yearName}
                 />
                 <Divider />
                 <CardContent>
@@ -85,93 +91,181 @@ const BuildingInformation = ({ className, ...rest }) => {
                     >
                         <Grid
                             item
-                            md={12}
+                            md={6}
                             xs={12}
                         >
                             <TextField
                                 fullWidth
-                                helperText="Please specify the building ID"
-                                label="Building ID"
-                                name="buildingID"
+                                label="Jun"
+                                name="jun"
                                 onChange={handleChange}
                                 required
-                                value={values.buildingID}
+                                value={values.jun}
                                 variant="outlined"
                             />
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={6}
                             xs={12}
                         >
                             <TextField
                                 fullWidth
-                                helperText="Please specify the building name"
-                                label="Building name"
-                                name="buildingName"
+                                label="Dec"
+                                name="dec"
                                 onChange={handleChange}
                                 required
-                                value={values.buildingName}
+                                value={values.dec}
                                 variant="outlined"
                             />
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={6}
                             xs={12}
                         >
                             <TextField
                                 fullWidth
-                                label="Building number"
-                                name="Building Number"
+                                label="Jul"
+                                name="jul"
                                 onChange={handleChange}
                                 required
-                                value={values.buildingNumber}
+                                value={values.jul}
                                 variant="outlined"
                             />
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={6}
                             xs={12}
                         >
                             <TextField
                                 fullWidth
-                                label="Address"
-                                name="address"
+                                label="Jan"
+                                name="jan"
                                 onChange={handleChange}
                                 required
-                                value={values.address}
+                                value={values.jan}
                                 variant="outlined"
                             />
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={6}
                             xs={12}
                         >
                             <TextField
                                 fullWidth
-                                label="Substantial Completion"
-                                name="substantialCompletion"
+                                label="Aug"
+                                name="aug"
                                 onChange={handleChange}
                                 required
-                                value={values.substantialCompletion}
+                                value={values.aug}
                                 variant="outlined"
                             />
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={6}
                             xs={12}
                         >
                             <TextField
                                 fullWidth
-                                label="Green Building Certificate"
-                                name="greenBuildingCertificate"
+                                label="Feb"
+                                name="feb"
                                 onChange={handleChange}
                                 required
-                                value={values.greenBuildingCertificate}
+                                value={values.feb}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Sep"
+                                name="sep"
+                                onChange={handleChange}
+                                required
+                                value={values.sep}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Mar"
+                                name="mar"
+                                onChange={handleChange}
+                                required
+                                value={values.mar}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Oct"
+                                name="oct"
+                                onChange={handleChange}
+                                required
+                                value={values.oct}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Apr"
+                                name="apr"
+                                onChange={handleChange}
+                                required
+                                value={values.apr}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Nov"
+                                name="nov"
+                                onChange={handleChange}
+                                required
+                                value={values.nov}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="May"
+                                name="may"
+                                onChange={handleChange}
+                                required
+                                value={values.may}
                                 variant="outlined"
                             />
                         </Grid>
@@ -196,8 +290,8 @@ const BuildingInformation = ({ className, ...rest }) => {
     );
 };
 
-BuildingInformation.propTypes = {
+DataPage.propTypes = {
     className: PropTypes.string
 };
 
-export default BuildingInformation;
+export default DataPage;

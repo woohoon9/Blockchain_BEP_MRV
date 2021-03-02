@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
+    Box, Card, CardHeader, Divider,
     makeStyles
 } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Page from 'src/components/Page';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import axios from 'axios';
-import BuildingInformation from './BuildingInformation';
-import BaselineModel from './BaselineModel';
-import Measurement from './Measurement';
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Page from "../../../components/Page";
+import Typography from "@material-ui/core/Typography";
+import DataPage from "./Data";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,7 +53,7 @@ function a11yProps(index) {
     };
 }
 
-const Stakeholders = () => {
+const Measurement = () => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -67,26 +64,41 @@ const Stakeholders = () => {
     return (
         <Page
             className={classes.root}
-            title="Building Stakeholders"
+            title="SteamMain"
         >
+            <Card>
+                <CardHeader
+                    title="Steam"
+                />
+                <Divider />
+            </Card>
             <AppBar position="static">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                    <Tab label="Building Information" {...a11yProps(0)} />
-                    <Tab label="Baseline Model" {...a11yProps(1)} />
-                    <Tab label="Measurement" {...a11yProps(2)} />
+                    <Tab label="First Year" {...a11yProps(0)} />
+                    <Tab label="Second Year" {...a11yProps(1)} />
+                    <Tab label="Third Year" {...a11yProps(2)} />
+                    <Tab label="Fourth Year" {...a11yProps(3)} />
+                    <Tab label="Fifth Year" {...a11yProps(4)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <BuildingInformation />
+                <DataPage year="First" type="steam" />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <BaselineModel />
+                <DataPage year="Second" type="steam" />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <Measurement />
+                <DataPage year="Third" type="steam" />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <DataPage year="Fourth" type="steam" />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+                <DataPage year="Fifth" type="steam" />
             </TabPanel>
         </Page>
+
     );
 };
 
-export default Stakeholders;
+export default Measurement;

@@ -1,7 +1,7 @@
 package com.woohoon9.bep.mrv;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woohoon9.bep.mrv.model.BuildingInfo;
 import com.woohoon9.bep.mrv.model.Mrv;
 import org.hyperledger.fabric.gateway.*;
 import org.slf4j.Logger;
@@ -13,18 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.security.InvalidKeyException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.PublicKey;
+import java.security.InvalidKeyException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -66,88 +61,99 @@ public class App {
     @RequestMapping(value = "/mrv", method = RequestMethod.POST)
     public ResponseEntity<?> createMrv(@RequestBody String id){
 
-        String resultStr = "";
+        Mrv resultMrv = null;
 
         try {
             byte[] result = getContract(channelName, chaincodeName).submitTransaction("createMrv", id);
-            resultStr = new String(result, UTF_8);
+            resultMrv = getMapper().readValue(new String(result, UTF_8), Mrv.class);
 
         }catch(Exception e){
             e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(resultStr, HttpStatus.CREATED);
+        return new ResponseEntity<>(resultMrv, HttpStatus.CREATED);
 
     }
 
     @RequestMapping(value = "/mrv/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getMrv(@PathVariable String id){
-        String resultStr = "";
+
+        Mrv resultMrv = null;
 
         try{
             byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetMrv", id);
-            resultStr = new String(result, UTF_8);
+            resultMrv = getMapper().readValue(new String(result, UTF_8), Mrv.class);
 
         }catch(Exception e){
             e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(resultStr, HttpStatus.OK);
+        return new ResponseEntity<>(resultMrv, HttpStatus.OK);
     }
 
+
+    // Create MRV
     @RequestMapping(value = "/mrv/transient", method = RequestMethod.POST)
-    public ResponseEntity<?> createMrvTransient(@RequestBody Mrv mrv) throws JsonProcessingException {
+    public ResponseEntity<?> createMrvTransient(@RequestBody Mrv mrv) {
 
-        String resultStr = "";
+        Mrv resultMrv = null;
 
-        logger.info("============================ mrv info ==================================\n" + getMapper().writeValueAsString(mrv)+ "\n========================================================================\n");
-
-        try{
+        try {
 
             HashMap<String, byte[]> mrvInput = new HashMap<>();
             mrvInput.put("createMrv", getMapper().writeValueAsBytes(mrv));
             byte[] result = getContract(channelName, chaincodeName).createTransaction("CreateMrvByTransient").setTransient(mrvInput).submit();
-            resultStr = new String(result, UTF_8);
+            resultMrv = getMapper().readValue(new String(result, UTF_8), Mrv.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(resultMrv, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/mrv/building/info/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getBuildingInfo(@PathVariable String id) {
+
+
+        BuildingInfo buildingInfo = null;
+
+        try{
+
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetBuildingInfo", id);
+            buildingInfo = getMapper().readValue(new String(result, UTF_8), BuildingInfo.class);
 
         }catch(Exception e){
             e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(resultStr, HttpStatus.CREATED);
+        return new ResponseEntity<>(buildingInfo, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/manager/product/{id}", method = RequestMethod.GET)
-//    public ResponseEntity<?> getProduct(@PathVariable String id) {
-//        ProductRecord resultProduct = null;
-//
-//        try {
-//
-//            byte[] result = getContract(channelName, chaincodeName).submitTransaction("getProduct", id);
-//            resultProduct = getMapper().readValue(new String(result, UTF_8), ProductRecord.class);
-//
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        return new ResponseEntity<>(resultProduct, HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(value = "/manager/product", method = RequestMethod.POST)
-//    public ResponseEntity<?> createProduct(@RequestBody ProductInfo productInfo){
-//        String resultStr = "";
-//        ProductKey key = null;
-//
-//        try {
-//            byte[] result = getContract(channelName, chaincodeName).submitTransaction("registProducts", productInfo.getName(), productInfo.getQty(), productInfo.getOwner());
-//            resultStr = new String(result, UTF_8);
-//            key = getMapper().readValue(new String(result, UTF_8), ProductKey.class);
-//
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        return new ResponseEntity<>(key, HttpStatus.CREATED);
-//    }
+    @RequestMapping(value = "/mrv/building/info", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> createBuildingInfo(@RequestBody BuildingInfo buildingInfo) {
+
+        BuildingInfo resultBuildingInfo = null;
+
+        try{
+
+            HashMap<String, byte[]> buildingInfoInput = new HashMap<>();
+            buildingInfoInput.put("createBuildingInfo", getMapper().writeValueAsBytes(buildingInfo));
+            byte[] result = getContract(channelName, chaincodeName).createTransaction("CreateBuildingInfoByTransient").setTransient(buildingInfoInput).submit();
+            resultBuildingInfo = getMapper().readValue(new String(result, UTF_8), BuildingInfo.class);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(resultBuildingInfo, HttpStatus.CREATED);
+    }
 
     private Contract getContract(String channelId, String chaincodeId) throws Exception {
 

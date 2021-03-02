@@ -10,9 +10,7 @@ import Page from 'src/components/Page';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
-import BuildingInformation from './BuildingInformation';
-import BaselineModel from './BaselineModel';
-import Measurement from './Measurement';
+import EnergyAuditorsInformation from './EnergyAuditorsInformation';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -77,13 +75,13 @@ const Stakeholders = () => {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <BuildingInformation />
+                <EnergyAuditorsInformation />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <BaselineModel />
+                Item Two
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <Measurement />
+                Item Three
             </TabPanel>
         </Page>
     );
