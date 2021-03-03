@@ -13,8 +13,40 @@ type SmartContract struct {
 
 // Mrv data
 type Mrv struct {
-	Type	string `json:"objectType"`
-	ID 		string `json:"id"`
+	Type					string `json:"objectType"`
+	ID 						string `json:"id"`
+	Year					string `json:"year"`
+	EnergyType				string `json:"energyType"`
+	Jan 					string `json:"jan"`
+	Feb 					string `json:"feb"`
+	Mar 					string `json:"mar"`
+	Apr 					string `json:"apr"`
+	May						string `json:"may"`
+	Jun 					string `json:"jun"`
+	Jul						string `json:"jul"`
+	Sep 					string `json:"sep"`
+	Oct 					string `json:"oct"`
+	Nov 					string `json:"nov"`
+	Dec 					string `json:"dec"`
+}
+
+type BaselineModel struct {
+	Type   					string `json:"objectType"`
+	ID     					string `json:"id"`
+	ElectricityMMBTU		string `json:"electricityMMBTU"`
+	NaturalGasMMBTU			string `json:"naturalGasMMBTU"`
+	ChilledWaterMMBTU		string `json:"chilledWaterMMBTU"`
+	SteamMMBTU				string `json:"steamMMBTU"`
+	ElectricityKWH			string `json:"electricityKWH"`
+	NaturalGasSCF			string `json:"naturalGasSCF"`
+	ChilledWaterKTON		string `json:"chilledWaterKTON"`
+	SteamKLBS				string `json:"steamKLBS"`
+	GHGBaseCoalMMBTU		string `json:"ghgbasecoalMMBTU"`
+	GHGBaseNaturalGasMMBTU	string `json:"ghgbaseNaturalGasMMBTU"`
+	GHGBaseOilMMBTU			string `json:"ghgbaseOilMMBUT"`
+	GHGemiCoalKG			string `json:"ghgemiCoalKG"`
+	GHGemiNaturalGasKG		string `json:"ghgemiNaturalGasKG"`
+	GHGemiOilKG				string `json:"GHGemiOilKG"`
 }
 
 type BuildingInfoList struct {
@@ -22,17 +54,17 @@ type BuildingInfoList struct {
 }
 
 type BuildingInfo struct {
-	Type string `json:"objectType"`
-	ID	string	`json:"id"`
-	BuildingName string `json:"name"`
-	BuildingNumber string `json:"number"`
-	BuildingAddress string `json:"address"`
-	SubstantialCompletion string `json:"substantialCompletion"`
-	GreenBuildingCertificate string `json:"greenBuildingCertificate"`
+	Type 						string `json:"objectType"`
+	ID							string `json:"id"`
+	BuildingName 				string `json:"name"`
+	BuildingNumber 				string `json:"number"`
+	BuildingAddress 			string `json:"address"`
+	SubstantialCompletion 		string `json:"substantialCompletion"`
+	GreenBuildingCertificate 	string `json:"greenBuildingCertificate"`
 }
 
 type ResultStatus struct {
-	Status 	string  `json:"status"`
+	Status 	string `json:"status"`
 }
 
 // CreateMrv issue MRV data
