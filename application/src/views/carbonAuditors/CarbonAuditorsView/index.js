@@ -1,16 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useState} from 'react';
 import {
-    makeStyles
+    Card, CardContent, CardHeader, Container, Divider, Grid,
+    makeStyles, TextField
 } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Page from 'src/components/Page';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import axios from 'axios';
-import CarbonAuditorsInformation from './CarbonAuditorsInformation';
+import Results from "./Results";
+import Toolbar from "./Toolbar";
+import data from "./data";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,70 +18,50 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={3}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
-
-const Stakeholders = () => {
+const CarbonAuditorsView = () => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    const [customers] = useState(data);
 
     return (
         <Page
             className={classes.root}
-            title="Building Stakeholders"
+            title="Customers"
         >
-            <AppBar position="static">
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                    <Tab label="Building Information" {...a11yProps(0)} />
-                    <Tab label="Baseline Model" {...a11yProps(1)} />
-                    <Tab label="Measurement" {...a11yProps(2)} />
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                <CarbonAuditorsInformation />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
+            <Card>
+                <CardHeader
+                    title="Carbon Credit Auditors"
+                />
+                <Divider />
+                <CardContent>
+                    <Grid
+                        container
+                        spacing={3}
+                    >
+                        <Grid
+                            item
+                            md={4}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                name="buildingName"
+                                required
+                                value="CTRB"
+                                variant="outlined"
+                            />
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <Divider />
+            </Card>
+            <Container maxWidth={false}>
+                <Box mt={3}>
+                    <Results customers={customers} />
+                </Box>
+                <Toolbar />
+            </Container>
         </Page>
     );
 };
 
-export default Stakeholders;
+export default CarbonAuditorsView;

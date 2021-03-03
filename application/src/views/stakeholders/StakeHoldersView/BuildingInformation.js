@@ -23,7 +23,7 @@ const BuildingInformation = ({ className, ...rest }) => {
     const [values, setValues] = useState({
         buildingID: 'Building ID',
         buildingName: 'Building name',
-        buildingNumber: '0',
+        buildingNumber: '1375',
         address: 'Building address',
         substantialCompletion: 'Substantial completion',
         greenBuildingCertificate: 'Green building certificate'
@@ -122,6 +122,7 @@ const BuildingInformation = ({ className, ...rest }) => {
                         >
                             <TextField
                                 fullWidth
+                                helperText="Please specify the building number"
                                 label="Building number"
                                 name="Building Number"
                                 onChange={handleChange}
