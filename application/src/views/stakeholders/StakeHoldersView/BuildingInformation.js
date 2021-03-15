@@ -21,12 +21,11 @@ const useStyles = makeStyles(() => ({
 const BuildingInformation = ({ className, ...rest }) => {
     const classes = useStyles();
     const [values, setValues] = useState({
-        buildingID: 'Building ID',
-        buildingName: 'Building name',
-        buildingNumber: '1375',
-        address: 'Building address',
-        substantialCompletion: 'Substantial completion',
-        greenBuildingCertificate: 'Green building certificate'
+        buildingName: '',
+        buildingNumber: '',
+        address: '',
+        substantialCompletion: '',
+        greenBuildingCertificate: ''
     });
 
     const handleChange = (event) => {
@@ -37,8 +36,7 @@ const BuildingInformation = ({ className, ...rest }) => {
     };
 
     const handleSave = (event) => {
-        console.log(values["buildingID"])
-        apiPost(values["buildingID"], values["buildingName"], values["buildingNumber"], values["address"], values["substantialCompletion"], values["greenBuildingCertificate"])
+        apiPost(values["buildingNumber"], values["buildingName"], values["buildingNumber"], values["address"], values["substantialCompletion"], values["greenBuildingCertificate"])
 
     };
 
@@ -90,22 +88,6 @@ const BuildingInformation = ({ className, ...rest }) => {
                         >
                             <TextField
                                 fullWidth
-                                helperText="Please specify the building ID"
-                                label="Building ID"
-                                name="buildingID"
-                                onChange={handleChange}
-                                required
-                                value={values.buildingID}
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid
-                            item
-                            md={12}
-                            xs={12}
-                        >
-                            <TextField
-                                fullWidth
                                 helperText="Please specify the building name"
                                 label="Building name"
                                 name="buildingName"
@@ -123,8 +105,8 @@ const BuildingInformation = ({ className, ...rest }) => {
                             <TextField
                                 fullWidth
                                 helperText="Please specify the building number"
-                                label="Building number"
-                                name="Building Number"
+                                label="Building Number"
+                                name="buildingNumber"
                                 onChange={handleChange}
                                 required
                                 value={values.buildingNumber}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Box, Card, CardHeader, Divider,
-    makeStyles
+    Box, Button, Card, CardContent, CardHeader, Divider, Grid,
+    makeStyles, TextField
 } from '@material-ui/core';
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -10,6 +10,7 @@ import Tab from "@material-ui/core/Tab";
 import Page from "../../../components/Page";
 import Typography from "@material-ui/core/Typography";
 import Data from "./Data";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,9 +54,10 @@ function a11yProps2(index) {
     };
 }
 
-const Measurement = () => {
+const Measurement = (buildingID) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -82,19 +84,19 @@ const Measurement = () => {
                 </Tabs>
             </AppBar>
             <ElectricityTabPanel value={value} index={0}>
-                <Data year="First" type="electricity"/>
+                <Data year="First" type="electricity" buildingID={buildingID} />
             </ElectricityTabPanel>
             <ElectricityTabPanel value={value} index={1}>
-                <Data year="Second" type="electricity"/>
+                <Data year="Second" type="electricity" buildingID={buildingID} />
             </ElectricityTabPanel>
             <ElectricityTabPanel value={value} index={2}>
-                <Data year="Third" type="electricity"/>
+                <Data year="Third" type="electricity" buildingID={buildingID} />
             </ElectricityTabPanel>
             <ElectricityTabPanel value={value} index={3}>
-                <Data year="Fourth" type="electricity"/>
+                <Data year="Fourth" type="electricity" buildingID={buildingID} />
             </ElectricityTabPanel>
             <ElectricityTabPanel value={value} index={4}>
-                <Data year="Fifth" type="electricity"/>
+                <Data year="Fifth" type="electricity" buildingID={buildingID} />
             </ElectricityTabPanel>
         </Page>
 

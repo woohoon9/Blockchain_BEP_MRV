@@ -18,22 +18,25 @@ const useStyles = makeStyles(() => ({
     root: {}
 }));
 
-const DataPage = ({ className, year, type, ...rest }) => {
+const DataPage = ({ className, year, type,  ...rest }) => {
     const classes = useStyles();
     const yearName = year + " Year";
     const [values, setValues] = useState({
-        jan: "Jan",
-        feb: "Feb",
-        mar: "Mar",
-        apr: "Apr",
-        may: "May",
-        jun: "Jun",
-        jul: "Jul",
-        aug: "Aug",
-        sep: "Sep",
-        oct: "Oct",
-        nov: "Nov",
-        dec: "Dec"
+        unit: '',
+        buildingID: '',
+        buildings: [],
+        jan: 0,
+        feb: 0,
+        mar: 0,
+        apr: 0,
+        may: 0,
+        jun: 0,
+        jul: 0,
+        aug: 0,
+        sep: 0,
+        oct: 0,
+        nov: 0,
+        dec: 0
     });
 
     const handleChange = (event) => {
@@ -44,31 +47,64 @@ const DataPage = ({ className, year, type, ...rest }) => {
     };
 
     const handleSave = (event) => {
-        console.log(values["buildingID"])
-        apiPost(values["buildingID"], values["buildingName"], values["buildingNumber"], values["address"], values["substantialCompletion"], values["greenBuildingCertificate"])
+        apiPost(values["buildingID"], values["unit"], year, type, values["jan"], values["feb"], values["mar"], values["apr"], values["may"], values["jun"], values["jul"], values["aug"], values["sep"], values["oct"], values["nov"], values["dec"])
 
     };
+
+    const selectUnit = (event) => {
+        setValues({
+            ...values,
+            unit: event.target.value
+        })
+    }
+
+    const selectBuilding = (event) => {
+        setValues({
+            ...values,
+            buildingID: event.target.value
+        })
+    }
+
+    const getBuilding = async () => {
+        var url = "http://localhost:8080/api/mrv/building/list";
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        console.log(response.data.buildingList)
+        setValues({
+            ...values,
+            buildings: response.data.buildingList
+        })
+
+        alert("Successfully get building list")
+    }
 
     const apiGet = async (id) => {
         var url = "http://localhost:8080/api/mrv/building/info/" + id;
         const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
         console.log(response)
-        // await this.setState({argValue: response.data});
     }
 
-    const apiPost = async (buildingId, buildingName, buildingNumber, buildingAddress, substantialCompletion, greenBuildingCertificate) => {
-        var url = "http://localhost:8080/api/mrv/building/info";
+    const apiPost = async (buildingId, unit, year, type, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec) => {
+        var url = "http://localhost:8080/api/mrv/transient";
         const response = await axios.post(url, {
-            "objectType": "BuildingInfo",
+            "objectType": "MrvData",
             "id":buildingId,
-            "name": buildingName,
-            "number": buildingNumber,
-            "address": buildingAddress,
-            "substantialCompletion":substantialCompletion,
-            "greenBuildingCertificate":greenBuildingCertificate
+            "unit": unit,
+            "year": year,
+            "energyType": type,
+            "jan": jan,
+            "feb": feb,
+            "mar": mar,
+            "apr": apr,
+            "may": may,
+            "jun": jun,
+            "jul": jul,
+            "aug": aug,
+            "sep": sep,
+            "oct": oct,
+            "nov": nov,
+            "dec": dec
         }, {headers: {'Access-Control-Allow-Origin' : '*','Access-Control-Allow-Headers':'*'}});
         console.log(response.data);
-        // await this.setState({invokeResult: response.data.status});
     }
 
 
@@ -84,6 +120,83 @@ const DataPage = ({ className, year, type, ...rest }) => {
                     title={yearName}
                 />
                 <Divider />
+                <Card>
+                    <CardHeader
+                        title="Select Building"
+                    />
+                    <CardContent>
+                        <Grid
+                            container
+                            spacing={3}
+                        >
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    fullWidth
+                                    label="Select Building"
+                                    name="buildingID"
+                                    onChange={selectBuilding}
+                                    required
+                                    select
+                                    SelectProps={{ native: true }}
+                                    value={values.buildingID}
+                                    variant="outlined"
+                                >
+                                    {values.buildings.map((option) => (
+                                        <option
+                                            key={option.id}
+                                            value={option.id}
+                                        >
+                                            {option.name}
+                                        </option>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <Box
+                                    display="flex"
+                                    justifyContent="flex-end"
+                                    p={2}
+                                >
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={getBuilding}
+                                    >
+                                        Get Building
+                                    </Button>
+                                </Box>
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    fullWidth
+                                    label="Unit"
+                                    name="unit"
+                                    onChange={selectUnit}
+                                    required
+                                    select
+                                    SelectProps={{ native: true }}
+                                    value={values.unit}
+                                    variant="outlined"
+                                >
+                                    <option key="MMBTU" value="MMBTU">MMBTU</option>
+                                    <option key="KWH" value="KWH">KWH</option>
+                                </TextField>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
                 <CardContent>
                     <Grid
                         container
@@ -102,6 +215,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.jun}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -117,6 +232,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.dec}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -132,6 +249,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.jul}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -147,6 +266,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.jan}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -162,6 +283,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.aug}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -177,6 +300,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.feb}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -192,6 +317,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.sep}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -207,6 +334,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.mar}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -222,6 +351,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.oct}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -237,6 +368,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.apr}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -252,6 +385,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.nov}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -267,6 +402,8 @@ const DataPage = ({ className, year, type, ...rest }) => {
                                 required
                                 value={values.may}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                     </Grid>

@@ -10,6 +10,7 @@ import Tab from "@material-ui/core/Tab";
 import Page from "../../../components/Page";
 import Typography from "@material-ui/core/Typography";
 import DataPage from "./Data";
+import Data from "./Data";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +54,7 @@ function a11yProps(index) {
     };
 }
 
-const Measurement = () => {
+const Measurement = (buildingID) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -83,19 +84,19 @@ const Measurement = () => {
                 </Tabs>
             </AppBar>
             <ChilledWaterTabPanel value={value} index={0}>
-                <DataPage year="First" type="chilledWater" />
+                <DataPage year="First" type="chilledWater" buildingID={buildingID} />
             </ChilledWaterTabPanel>
             <ChilledWaterTabPanel value={value} index={1}>
-                <DataPage year="Second" type="chilledWater" />
+                <DataPage year="Second" type="chilledWater" buildingID={buildingID} />
             </ChilledWaterTabPanel>
             <ChilledWaterTabPanel value={value} index={2}>
-                <DataPage year="Third" type="chilledWater" />
+                <DataPage year="Third" type="chilledWater" buildingID={buildingID}  />
             </ChilledWaterTabPanel>
             <ChilledWaterTabPanel value={value} index={3}>
-                <DataPage year="Fourth" type="chilledWater" />
+                <DataPage year="Fourth" type="chilledWater" buildingID={buildingID} />
             </ChilledWaterTabPanel>
             <ChilledWaterTabPanel value={value} index={4}>
-                <DataPage year="Fifth" type="chilledWater" />
+                <DataPage year="Fifth" type="chilledWater" buildingID={buildingID}  />
             </ChilledWaterTabPanel>
         </Page>
 

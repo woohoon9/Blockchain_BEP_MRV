@@ -1,6 +1,8 @@
 package com.woohoon9.bep.mrv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woohoon9.bep.mrv.model.BaselineModel;
+import com.woohoon9.bep.mrv.model.BuildingIDNames;
 import com.woohoon9.bep.mrv.model.BuildingInfo;
 import com.woohoon9.bep.mrv.model.Mrv;
 import org.hyperledger.fabric.gateway.*;
@@ -59,6 +61,7 @@ public class App {
     private String walletUserName;
 
     @RequestMapping(value = "/mrv", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> createMrv(@RequestBody String id){
 
         Mrv resultMrv = null;
@@ -77,6 +80,7 @@ public class App {
     }
 
     @RequestMapping(value = "/mrv/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> getMrv(@PathVariable String id){
 
         Mrv resultMrv = null;
@@ -96,11 +100,14 @@ public class App {
 
     // Create MRV
     @RequestMapping(value = "/mrv/transient", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> createMrvTransient(@RequestBody Mrv mrv) {
 
         Mrv resultMrv = null;
 
         try {
+
+            logger.info(getMapper().writeValueAsString(mrv));
 
             HashMap<String, byte[]> mrvInput = new HashMap<>();
             mrvInput.put("createMrv", getMapper().writeValueAsBytes(mrv));
@@ -116,6 +123,7 @@ public class App {
     }
 
     @RequestMapping(value = "/mrv/building/info/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> getBuildingInfo(@PathVariable String id) {
 
 
@@ -153,6 +161,74 @@ public class App {
         }
 
         return new ResponseEntity<>(resultBuildingInfo, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/mrv/building/list", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> getBuildingList() {
+
+        BuildingIDNames buildingList = null;
+
+        try{
+
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetBuildingList");
+            buildingList = getMapper().readValue(new String(result, UTF_8), BuildingIDNames.class);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(buildingList, HttpStatus.OK);
+
+
+    }
+
+    @RequestMapping(value = "/mrv/building/baseline", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> createBaselineModel(@RequestBody BaselineModel baselineModel) {
+
+        BaselineModel resultBaselineModel = null;
+
+        try{
+
+            String buildingId = baselineModel.getId();
+
+            if(buildingId != null && buildingId != "") {
+                HashMap<String, byte[]> buildingInfoInput = new HashMap<>();
+                buildingInfoInput.put("createBaselineModel", getMapper().writeValueAsBytes(baselineModel));
+                byte[] result = getContract(channelName, chaincodeName).createTransaction("CreateBaselineModelByTransient").setTransient(buildingInfoInput).submit();
+                resultBaselineModel = getMapper().readValue(new String(result, UTF_8), BaselineModel.class);
+            }else{
+                return new ResponseEntity<>("Error: Building must be selected", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(resultBaselineModel, HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(value = "/mrv/building/baseline/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> getBaselineModel(@PathVariable String id) {
+
+        BaselineModel resultBaselineModel = null;
+
+        try{
+
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetBaselineModel", id);
+            resultBaselineModel = getMapper().readValue(new String(result, UTF_8), BaselineModel.class);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(resultBaselineModel, HttpStatus.OK);
     }
 
     private Contract getContract(String channelId, String chaincodeId) throws Exception {

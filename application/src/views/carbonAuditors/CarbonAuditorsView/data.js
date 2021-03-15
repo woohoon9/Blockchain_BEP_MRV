@@ -12,57 +12,57 @@ export default [
   {
     id: uuid(),
     item: 'First Year (kg)',
-    coal: '2,454,680.68',
-    naturalGas: '298,648.68',
-    oil: '78,723.57',
-    ghg: '90.11'
+    coal: '2,215,567.80',
+    naturalGas: '269,558.73',
+    oil: '71,057.31',
+    ghg: '365.97'
   },
   {
     id: uuid(),
     item: 'Second Year (kg)',
-    coal: '2,357,337.74',
-    naturalGas: '286,803.76',
-    oil: '75,599.45',
-    ghg: '202.42'
+    coal: '2,116,245.06',
+    naturalGas: '257,472.95',
+    oil: '67,869.72',
+    ghg: '480.57'
   },
   {
     id: uuid(),
     item: 'Third Year (kg)',
-    coal: '2,659,510.34',
-    naturalGas: '323,569.35',
-    oil: '85,292.72',
-    ghg: '-146.21'
+    coal: '2,420,550.01',
+    naturalGas: '294,497.96',
+    oil: '77,631.36',
+    ghg: '129.48'
   },
   {
     id: uuid(),
     item: 'Fourth Year (kg)',
-    coal: '2,676,362.35',
-    naturalGas: '325,619.94',
-    oil: '85,833.57',
-    ghg: '-165.66'
+    coal: '2,428,595.06',
+    naturalGas: '295,477.11',
+    oil: '77,889.84',
+    ghg: '120.20'
   },
   {
     id: uuid(),
     item: 'Fifth Year (kg)',
-    coal: '2,598,713.13',
-    naturalGas: '316,172.60',
-    oil: '83,343.10',
-    ghg: '-76.07'
+    coal: '2,354,554.64',
+    naturalGas: '286,468.81',
+    oil: '75,515.07',
+    ghg: '205.62',
   },
   {
     id: uuid(),
     item: 'Total Savings (kg)',
-    coal: '12,746,604.24',
-    naturalGas: '1,550,814.33',
-    oil: '408,792.41',
+    coal: '11,535,512.57',
+    naturalGas: '1,403,475.56',
+    oil: '369,963.30',
     ghg: ''
   },
   {
     id: uuid(),
     item: 'Total Savings (Tons)',
-    coal: '12,746.60424',
-    naturalGas: '1,550.81433',
-    oil: '408.79241',
-    ghg: '-95.41'
+    coal: '11,535.51',
+    naturalGas: '1,403.48',
+    oil: '369.96',
+    ghg: '1,301.84'
   }
 ];

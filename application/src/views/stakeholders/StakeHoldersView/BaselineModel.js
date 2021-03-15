@@ -14,6 +14,13 @@ import {
     makeStyles
 } from '@material-ui/core';
 
+const buildings = [
+    {
+        id: '',
+        name: ''
+    },
+];
+
 const useStyles = makeStyles(() => ({
     root: {}
 }));
@@ -21,23 +28,25 @@ const useStyles = makeStyles(() => ({
 const BaselineModel = ({ className, ...rest }) => {
     const classes = useStyles();
     const [values, setValues] = useState({
-        electricityMMBTU: 'electricity (MMBtu)',
-        electricityKWH: 'electricity (KWh)',
-        naturalGasMMBTU: 'Natural Gas (MMBtu)',
-        naturalGasSCF: 'Natural Gas (scf)',
-        chilledWaterMMBTU: 'Chilled Water (MMBtu)',
-        chilledWaterKTON: 'Chilled Water (Kton)',
-        steamMMBTU: 'Steam (MMBtu)',
-        steamKLBS: 'Steam (klbs)',
-        totalMMBTU: 'Total (MMBtu)',
-        coalMMBTU: 'Coal (MMBtu)',
-        GHGNaturalGasMMBTU: 'Natural Gas (MMBtu)',
-        oilMMBTU: 'Oil (MMBtu)',
-        coalKG: 'Coal (kg)',
-        naturalGasKG: 'Natural Gas (kg)',
-        oilKG: 'Oil (kg)',
-        totalCO2EKG: 'Total (Co2e, kg)',
-        totalCO2ETON: 'Total (Co2e, Tons)'
+        buildings: [],
+        buildingID: '',
+        electricityMMBTU: '',
+        electricityKWH: '',
+        naturalGasMMBTU: '',
+        naturalGasSCF: '',
+        chilledWaterMMBTU: '',
+        chilledWaterKTON: '',
+        steamMMBTU: '',
+        steamKLBS: '',
+        totalMMBTU: '',
+        coalMMBTU: '',
+        gHGNaturalGasMMBTU: '',
+        oilMMBTU: '',
+        coalKG: '',
+        naturalGasKG: '',
+        oilKG: '',
+        totalCO2EKG: '',
+        totalCO2ETON: ''
 
     });
 
@@ -45,37 +54,62 @@ const BaselineModel = ({ className, ...rest }) => {
         setValues({
             ...values,
             [event.target.name]: event.target.value
+
         });
     };
 
-    const handleSave = (event) => {
-        console.log(values["buildingID"])
-        apiPost(values["buildingID"], values["buildingName"], values["buildingNumber"], values["address"], values["substantialCompletion"], values["greenBuildingCertificate"])
-
+    const loadData = (event) => {
+        console.log("loadData")
     };
 
+
+    const handleSave = (event) => {
+        apiPost(values["buildingID"], values["electricityMMBTU"], values["electricityKWH"], values["naturalGasMMBTU"], values["naturalGasSCF"], values["chilledWaterMMBTU"], values["chilledWaterKTON"], values["steamMMBTU"], values["steamKLBS"], values["totalMMBTU"], values["coalMMBTU"], values["gHGNaturalGasMMBTU"], values["oilMMBTU"], values["coalKG"], values["naturalGasKG"], values["oilKG"], values["totalCO2EKG"], values["totalCO2ETON"] )
+    };
+
+    const getBuilding = async () => {
+        var url = "http://localhost:8080/api/mrv/building/list";
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        console.log(response.data.buildingList)
+        setValues({
+            buildings: response.data.buildingList
+        })
+
+        alert("Successfully get building list")
+    }
+
     const apiGet = async (id) => {
-        var url = "http://localhost:8080/api/mrv/building/info/" + id;
+        var url = "http://localhost:8080/api/mrv/building/baseline/" + id;
         const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
         console.log(response)
         // await this.setState({argValue: response.data});
     }
 
-    const apiPost = async (buildingId, buildingName, buildingNumber, buildingAddress, substantialCompletion, greenBuildingCertificate) => {
-        var url = "http://localhost:8080/api/mrv/building/info";
+    const apiPost = async (buildingId, electricityMMBTU, electricityKWH, naturalGasMMBTU, naturalGasSCF, chilledWaterMMBTU, chilledWaterKTON, steamMMBTU, steamKLBS, totalMMBTU, coalMMBTU, gHGNaturalGasMMBTU, oilMMBTU, coalKG, naturalGasKG, oilKG, totalCO2EKG, totalCO2ETON ) => {
+        var url = "http://localhost:8080/api/mrv/building/baseline";
         const response = await axios.post(url, {
-            "objectType": "BuildingInfo",
-            "id":buildingId,
-            "name": buildingName,
-            "number": buildingNumber,
-            "address": buildingAddress,
-            "substantialCompletion":substantialCompletion,
-            "greenBuildingCertificate":greenBuildingCertificate
+            "objectType": "BuidlingModel",
+            "id": buildingId,
+            "electricityMMBTU": electricityMMBTU,
+            "naturalGasMMBTU": naturalGasMMBTU,
+            "chilledWaterMMBTU": chilledWaterMMBTU,
+            "steamMMBTU": steamMMBTU,
+            "electricityKWH": electricityKWH,
+            "naturalGasSCF": naturalGasSCF,
+            "chilledWaterKTON": chilledWaterKTON,
+            "steamKLBS": steamKLBS,
+            "totalMMBTU": totalMMBTU,
+            "coalMMBTU": coalMMBTU,
+            "gHGNaturalGasMMBTU": gHGNaturalGasMMBTU,
+            "oilMMBTU": oilMMBTU,
+            "coalKG": oilMMBTU,
+            "naturalGasKG": naturalGasKG,
+            "oilKG": oilKG,
+            "totalCO2EKG": totalCO2EKG,
+            "totalCO2ETON": totalCO2ETON
         }, {headers: {'Access-Control-Allow-Origin' : '*','Access-Control-Allow-Headers':'*'}});
         console.log(response.data);
-        // await this.setState({invokeResult: response.data.status});
     }
-
 
     return (
         <form
@@ -90,6 +124,59 @@ const BaselineModel = ({ className, ...rest }) => {
                     title="Baseline Energy Consumption"
                 />
                 <Divider />
+
+                <Card>
+                    <CardHeader
+                        title="Select Building"
+                    />
+                    <CardContent>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <Box
+                                display="flex"
+                                justifyContent="flex-end"
+                                p={2}
+                            >
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={getBuilding}
+                                >
+                                    Get Building
+                                </Button>
+                            </Box>
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Select Building"
+                                name="buildingID"
+                                onChange={handleChange}
+                                required
+                                select
+                                SelectProps={{ native: true }}
+                                value={values.buildingID}
+                                variant="outlined"
+                            >
+                                {values.buildings.map((option) => (
+                                    <option
+                                        key={option.id}
+                                        value={option.id}
+                                    >
+                                        {option.name}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </Grid>
+                    </CardContent>
+                </Card>
                 <CardContent>
                     <Grid
                         container
@@ -168,7 +255,7 @@ const BaselineModel = ({ className, ...rest }) => {
                                 name="chilledWaterMMBTU"
                                 onChange={handleChange}
                                 required
-                                value={values.chilledWaterBBMTU}
+                                value={values.chilledWaterMMBTU}
                                 variant="outlined"
                             />
                         </Grid>
@@ -198,7 +285,7 @@ const BaselineModel = ({ className, ...rest }) => {
                                 name="steamMMBTU"
                                 onChange={handleChange}
                                 required
-                                value={values.steamBBMTU}
+                                value={values.steamMMBTU}
                                 variant="outlined"
                             />
                         </Grid>
@@ -268,10 +355,10 @@ const BaselineModel = ({ className, ...rest }) => {
                             <TextField
                                 fullWidth
                                 label="Natural Gas (MMBtu)"
-                                name="GHGNaturalGasMMBTU"
+                                name="gHGNaturalGasMMBTU"
                                 onChange={handleChange}
                                 required
-                                value={values.GHGNaturalGasMMBTU}
+                                value={values.gHGNaturalGasMMBTU}
                                 variant="outlined"
                             />
                         </Grid>
@@ -402,5 +489,6 @@ const BaselineModel = ({ className, ...rest }) => {
 BaselineModel.propTypes = {
     className: PropTypes.string
 };
+
 
 export default BaselineModel;

@@ -9,12 +9,9 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonDeserialize(builder = BuildingInfo.BuildingInfoBuilder.class)
+@JsonDeserialize(builder = BuildingIDName.BuildingIDNameBuilder.class)
 @Builder(toBuilder = true)
-public class BuildingInfo {
-
-    @JsonProperty
-    String objectType;
+public class BuildingIDName {
 
     @JsonProperty
     String name;
@@ -22,18 +19,6 @@ public class BuildingInfo {
     @JsonProperty()
     String id;
 
-    @JsonProperty
-    String number;
-
-    @JsonProperty
-    String address;
-
-    @JsonProperty
-    String substantialCompletion;
-
-    @JsonProperty
-    String greenBuildingCertificate;
-
     @JsonPOJOBuilder(withPrefix = "")
-    public static class BuildingInfoBuilder {}
+    public static class BuildingIDNameBuilder {}
 }

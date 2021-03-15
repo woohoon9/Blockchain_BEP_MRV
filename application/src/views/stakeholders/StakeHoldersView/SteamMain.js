@@ -10,6 +10,7 @@ import Tab from "@material-ui/core/Tab";
 import Page from "../../../components/Page";
 import Typography from "@material-ui/core/Typography";
 import DataPage from "./Data";
+import Data from "./Data";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +54,7 @@ function a11yProps(index) {
     };
 }
 
-const Measurement = () => {
+const Measurement = (buildingID) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -82,19 +83,19 @@ const Measurement = () => {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <DataPage year="First" type="steam" />
+                <DataPage year="First" type="steam" buildingID={buildingID} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <DataPage year="Second" type="steam" />
+                <DataPage year="Second" type="steam" buildingID={buildingID}  />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <DataPage year="Third" type="steam" />
+                <DataPage year="Third" type="steam" buildingID={buildingID}  />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <DataPage year="Fourth" type="steam" />
+                <DataPage year="Fourth" type="steam" buildingID={buildingID}  />
             </TabPanel>
             <TabPanel value={value} index={4}>
-                <DataPage year="Fifth" type="steam" />
+                <DataPage year="Fifth" type="steam" buildingID={buildingID}  />
             </TabPanel>
         </Page>
 

@@ -9,9 +9,9 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonDeserialize(builder = Mrv.MrvBuilder.class)
+@JsonDeserialize(builder = BaselineModel.BaselineModelBuilder.class)
 @Builder(toBuilder = true)
-public class Mrv {
+public class BaselineModel {
 
     @JsonProperty
     String objectType;
@@ -20,53 +20,56 @@ public class Mrv {
     String id;
 
     @JsonProperty
-    String unit;
+    String electricityMMBTU;
 
     @JsonProperty
-    String year;
+    String naturalGasMMBTU;
 
     @JsonProperty
-    String energyType;
+    String chilledWaterMMBTU;
 
     @JsonProperty
-    float jan;
+    String steamMMBTU;
 
     @JsonProperty
-    float feb;
+    String electricityKWH;
 
     @JsonProperty
-    float mar;
+    String naturalGasSCF;
 
     @JsonProperty
-    float apr;
+    String chilledWaterKTON;
 
     @JsonProperty
-    float may;
+    String steamKLBS;
 
     @JsonProperty
-    float jun;
+    String totalMMBTU;
 
     @JsonProperty
-    float jul;
+    String coalMMBTU;
 
     @JsonProperty
-    float aug;
+    String gHGNaturalGasMMBTU;
 
     @JsonProperty
-    float sep;
+    String oilMMBTU;
 
     @JsonProperty
-    float oct;
+    String coalKG;
 
     @JsonProperty
-    float nov;
+    String naturalGasKG;
 
     @JsonProperty
-    float dec;
+    String oilKG;
 
     @JsonProperty
-    float sum;
+    String totalCO2EKG;
+
+    @JsonProperty
+    String totalCO2ETON;
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class MrvBuilder {}
+    public static class BaselineModelBuilder {}
 }
