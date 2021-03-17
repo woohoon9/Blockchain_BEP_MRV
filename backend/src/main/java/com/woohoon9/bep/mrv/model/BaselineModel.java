@@ -20,55 +20,55 @@ public class BaselineModel {
     String id;
 
     @JsonProperty
-    String electricityMMBTU;
+    float electricityMMBTU;
 
     @JsonProperty
-    String naturalGasMMBTU;
+    float naturalGasMMBTU;
 
     @JsonProperty
-    String chilledWaterMMBTU;
+    float chilledWaterMMBTU;
 
     @JsonProperty
-    String steamMMBTU;
+    float steamMMBTU;
 
     @JsonProperty
-    String electricityKWH;
+    float electricityKWH;
 
     @JsonProperty
-    String naturalGasSCF;
+    float naturalGasSCF;
 
     @JsonProperty
-    String chilledWaterKTON;
+    float chilledWaterKTON;
 
     @JsonProperty
-    String steamKLBS;
+    float steamKLBS;
 
     @JsonProperty
-    String totalMMBTU;
+    float totalMMBTU;
 
     @JsonProperty
-    String coalMMBTU;
+    float coalMMBTU;
 
     @JsonProperty
-    String gHGNaturalGasMMBTU;
+    float gHGNaturalGasMMBTU;
 
     @JsonProperty
-    String oilMMBTU;
+    float oilMMBTU;
 
     @JsonProperty
-    String coalKG;
+    float coalKG;
 
     @JsonProperty
-    String naturalGasKG;
+    float naturalGasKG;
 
     @JsonProperty
-    String oilKG;
+    float oilKG;
 
     @JsonProperty
-    String totalCO2EKG;
+    float totalCO2EKG;
 
     @JsonProperty
-    String totalCO2ETON;
+    float totalCO2ETON;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class BaselineModelBuilder {}

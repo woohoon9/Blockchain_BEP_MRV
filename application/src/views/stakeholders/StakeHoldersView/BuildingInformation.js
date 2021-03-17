@@ -21,6 +21,8 @@ const useStyles = makeStyles(() => ({
 const BuildingInformation = ({ className, ...rest }) => {
     const classes = useStyles();
     const [values, setValues] = useState({
+        buildings: [],
+        buildingID: '',
         buildingName: '',
         buildingNumber: '',
         address: '',
@@ -59,7 +61,46 @@ const BuildingInformation = ({ className, ...rest }) => {
             "greenBuildingCertificate":greenBuildingCertificate
         }, {headers: {'Access-Control-Allow-Origin' : '*','Access-Control-Allow-Headers':'*'}});
         console.log(response.data);
-        // await this.setState({invokeResult: response.data.status});
+        alert("Successfully create building data")
+    }
+
+
+    const selectBuilding = async (event) => {
+        var bID = event.target.value;
+        await setValues({
+            ...values,
+            buildingID: event.target.value
+        })
+
+        await getBuildingInfo(bID);
+
+    }
+
+    const getBuildingInfo = async (id) => {
+        var url = "http://localhost:8080/api/mrv/building/info/" + id;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        console.log(response.data)
+        setValues({
+            ...values,
+            buildingName: response.data.name,
+            address: response.data.address,
+            buildingNumber: response.data.number,
+            substantialCompletion: response.data.substantialCompletion,
+            greenBuildingCertificate: response.data.greenBuildingCertificate
+        })
+
+    }
+
+    const getBuilding = async () => {
+        var url = "http://localhost:8080/api/mrv/building/list";
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        console.log(response.data.buildingList)
+        setValues({
+            ...values,
+            buildings: response.data.buildingList
+        })
+
+        alert("Successfully get building list")
     }
 
 
@@ -76,6 +117,61 @@ const BuildingInformation = ({ className, ...rest }) => {
                     title="Building Information"
                 />
                 <Divider />
+                <CardContent>
+                    <Grid
+                        container
+                        spacing={3}
+                    >
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Select Building"
+                                name="buildingID"
+                                onChange={selectBuilding}
+                                required
+                                select
+                                SelectProps={{ native: true }}
+                                value={values.buildingID}
+                                variant="outlined"
+                            >
+                                {values.buildings.map((option) => (
+                                    <option
+                                        key={option.id}
+                                        value={option.id}
+                                    >
+                                        {option.name}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <Box
+                                display="flex"
+                                justifyContent="flex-end"
+                                p={2}
+                            >
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={getBuilding}
+                                >
+                                    Get Building
+                                </Button>
+                            </Box>
+                        </Grid>
+
+                    </Grid>
+
+
+                </CardContent>
                 <CardContent>
                     <Grid
                         container

@@ -15,7 +15,6 @@ type SmartContract struct {
 type Mrv struct {
 	Type					string 	`json:"objectType"`
 	ID 						string 	`json:"id"`
-	Unit					string  `json:"unit"`
 	Year					string 	`json:"year"`
 	EnergyType				string 	`json:"energyType"`
 	Jan 					float64 `json:"jan"`
@@ -31,28 +30,29 @@ type Mrv struct {
 	Nov 					float64 `json:"nov"`
 	Dec 					float64 `json:"dec"`
 	Sum						float64 `json:"sum"`
+	PV 						float64 `json:"pv"`
 }
 
 type BaselineModel struct {
 	Type   					string `json:"objectType"`
 	ID     					string `json:"id"`
-	ElectricityMMBTU		string `json:"electricityMMBTU"`
-	NaturalGasMMBTU			string `json:"naturalGasMMBTU"`
-	ChilledWaterMMBTU		string `json:"chilledWaterMMBTU"`
-	SteamMMBTU				string `json:"steamMMBTU"`
-	ElectricityKWH			string `json:"electricityKWH"`
-	NaturalGasSCF			string `json:"naturalGasSCF"`
-	ChilledWaterKTON		string `json:"chilledWaterKTON"`
-	SteamKLBS				string `json:"steamKLBS"`
-	TotalMMBTU				string `json:"totalMMBTU"`
-	CoalMMBTU				string `json:"coalMMBTU"`
-	GHGNaturalGasMMBTU		string `json:"gHGNaturalGasMMBTU"`
-	OilMMBTU				string `json:"oilMMBTU"`
-	CoalKG					string `json:"coalKG"`
-	NaturalGasKG			string `json:"naturalGasKG"`
-	OilKG					string `json:"oilKG"`
-	TotalCO2EKG				string `json:"totalCO2EKG"`
-	TotalCO2ETON			string `json:"totalCO2ETON"`
+	ElectricityMMBTU		float64 `json:"electricityMMBTU"`
+	NaturalGasMMBTU			float64 `json:"naturalGasMMBTU"`
+	ChilledWaterMMBTU		float64 `json:"chilledWaterMMBTU"`
+	SteamMMBTU				float64 `json:"steamMMBTU"`
+	ElectricityKWH			float64 `json:"electricityKWH"`
+	NaturalGasSCF			float64 `json:"naturalGasSCF"`
+	ChilledWaterKTON		float64 `json:"chilledWaterKTON"`
+	SteamKLBS				float64 `json:"steamKLBS"`
+	TotalMMBTU				float64 `json:"totalMMBTU"`
+	CoalMMBTU				float64 `json:"coalMMBTU"`
+	GHGNaturalGasMMBTU		float64 `json:"gHGNaturalGasMMBTU"`
+	OilMMBTU				float64 `json:"oilMMBTU"`
+	CoalKG					float64 `json:"coalKG"`
+	NaturalGasKG			float64 `json:"naturalGasKG"`
+	OilKG					float64 `json:"oilKG"`
+	TotalCO2EKG				float64 `json:"totalCO2EKG"`
+	TotalCO2ETON			float64 `json:"totalCO2ETON"`
 }
 
 type BuildingList struct {
@@ -85,29 +85,26 @@ type BuildingInfo struct {
 type CCAByOne struct {
 	Item						string  `json:"item"`
 	Coal						float64 `json:"coal"`
-	Natural						float64 `json:"natural"`
-	Gas							float64	`json:"gas"`
+	NaturalGas					float64 `json:"naturalGas"`
 	Oil							float64 `json:"oil"`
 	GHGEmissionsReduction		float64 `json:"ghgEmissionReduction"`
 }
 
 type CCAs struct{
-	CCAList 		[]CCAByOne		`json:"ccaList"`
+	CCAList 		[]CCAByOne		`json:"ccList"`
 }
 
 type ESAByOne struct {
 	Item						string  `json:"item"`
 	Electricity					float64 `json:"electricity"`
-	Natural 					float64 `json:"natural"`
-	Gas							float64 `json:"gas"`
-	Chilled 					float64	`json:"chilled"`
-	Water						float64 `json:"water"`
+	NaturalGas					float64 `json:"naturalGas"`
+	ChilledWater 				float64	`json:"chilledWater"`
 	Steam						float64 `json:"steam"`
-	EnergySavings				float64 `json:"evergySavings"`
+	EnergySavings				float64 `json:"energySaving"`
 }
 
 type ESAs struct{
-	ESAList			[]ESAByOne		`json:"esaList"`
+	ESAList			[]ESAByOne		`json:"esList"`
 }
 
 type ResultStatus struct {
@@ -149,7 +146,7 @@ func (s *SmartContract) CreateMrvByTransient(ctx contractapi.TransactionContextI
 	}
 
 	mrvInput.Sum = mrvInput.Jan + mrvInput.Feb + mrvInput.Mar + mrvInput.Apr + mrvInput.May + mrvInput.Jun + mrvInput.Jul +mrvInput.Aug + mrvInput.Sep + mrvInput.Oct + mrvInput.Nov + mrvInput.Dec
-	var mrvId = mrvInput.ID + "-" + mrvInput.EnergyType + "-" + mrvInput.Unit + "-" + mrvInput.Year
+	var mrvId = mrvInput.ID + "-" + mrvInput.EnergyType + "-" + mrvInput.Year
 
 	mrvInputJSON, err := json.Marshal(mrvInput)
 	if err != nil {
@@ -375,6 +372,10 @@ func (s *SmartContract) GetBuildingList(ctx contractapi.TransactionContextInterf
 	err = json.Unmarshal(buildingInfoListJSON, &buildingInfoList)
 
 	var buildingIDNameList []BuildingIDName
+	emptydb := BuildingIDName{}
+	emptydb.ID = ""
+	emptydb.Name = ""
+	buildingIDNameList = append(buildingIDNameList, emptydb)
 	for k, v := range buildingInfoList.BuildingList {
 		bd := BuildingIDName{}
 		bd.ID = k
@@ -447,29 +448,92 @@ func (s *SmartContract) GetESA(ctx contractapi.TransactionContextInterface, buil
 
 	var energyTypes = []string{"electricity", "naturalGas", "chilledWater", "steam"}
 	var years = []string{"First", "Second", "Third","Fourth", "Fifth"}
-	var mrvDataMap map[string]Mrv
+	mrvDataMap := make(map[string]Mrv)
 
 	for _, energyType := range energyTypes {
-		for _, year := range years{
-			mrvKey := buildingID + "-" + energyType + "MMBTU" + "-" + year
+		for _, year := range years {
+			mrvKey := buildingID + "-" + energyType + "-" + year
 
 			mrvDataJSON, err := ctx.GetStub().GetState(mrvKey)
 			if err != nil {
 				return nil, fmt.Errorf("fail to get mrv data: %v", err)
 			}
 
-			var mrvData Mrv
-			err = json.Unmarshal(mrvDataJSON, &mrvData)
-			if err != nil {
+			if len(mrvDataJSON) > 0 {
+
+				var mrvData Mrv
+				err = json.Unmarshal(mrvDataJSON, &mrvData)
+				if err != nil {
 				return nil, fmt.Errorf("fail to unmarshal Mrv data: %v", err)
 			}
 
-			mrvDataMap[mrvKey] = mrvData
+				mrvDataMap[mrvKey] = mrvData
+			}
 		}
 	}
 
-	var esas ESAs
+	esas := ESAs{}
+	mrvDataList := []ESAByOne{}
+	baseline := ESAByOne{"Baseline (MMBTU)", baselineModel.ElectricityMMBTU, baselineModel.NaturalGasMMBTU, baselineModel.ChilledWaterMMBTU, baselineModel.SteamMMBTU, 0}
+	mrvDataList = append(mrvDataList, baseline)
 
+	returnedEsas, err := s.calES(ctx, esas, mrvDataMap, buildingID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get calculated EnergySaings data: %v", err)
+	}
+
+	return returnedEsas, nil
+}
+
+func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas ESAs, mrvData map[string]Mrv, buildingID string) (*ESAs, error) {
+
+	mrvDataList := esas.ESAList
+	var years = []string{"First", "Second", "Third","Fourth", "Fifth"}
+	var energyTypes = []string{"electricity", "naturalGas", "chilledWater", "steam"}
+
+	var totalElec float64
+	var totalNaturalGas float64
+	var totalChilledWater float64
+	var totalSteam float64
+	for _, year := range years{
+
+		es:= ESAByOne{}
+		es.Item = year + " year (MMBTU)"
+
+		for _, energyType := range energyTypes{
+			mrvKey := buildingID + "-" +  energyType+ "-" + year
+			mrv := mrvData[mrvKey]
+
+			fmt.Println(mrvKey)
+			fmt.Println(mrv)
+			switch energyType {
+			case "electricity" :
+				es.Electricity = mrv.Sum
+				totalElec = totalElec + mrv.Sum
+			case "naturalGas" :
+				es.NaturalGas = mrv.Sum
+				totalNaturalGas = totalNaturalGas + mrv.Sum
+			case "chilledWater" :
+				es.ChilledWater = mrv.Sum
+				totalChilledWater = totalChilledWater + mrv.Sum
+			case "steam" :
+				es.Steam = mrv.Sum
+				totalSteam = totalSteam + mrv.Sum
+			}
+		}
+
+		mrvDataList = append(mrvDataList, es)
+
+	}
+
+	totalMrv := ESAByOne{"Total Savings", totalElec, totalNaturalGas, totalChilledWater, totalSteam, 0}
+	mrvDataList = append(mrvDataList, totalMrv)
+	esas.ESAList = mrvDataList
 
 	return &esas, nil
+}
+
+func (s *SmartContract) calCC(ctx contractapi.TransactionContextInterface) {
+
+
 }

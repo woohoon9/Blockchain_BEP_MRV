@@ -18,11 +18,11 @@ const useStyles = makeStyles(() => ({
     root: {}
 }));
 
-const DataPage = ({ className, year, type,  ...rest }) => {
+const ElectricityDataPage = ({ className, year, type,  ...rest }) => {
     const classes = useStyles();
     const yearName = year + " Year";
     const [values, setValues] = useState({
-        unit: '',
+        pv: 0,
         buildingID: '',
         buildings: [],
         jan: 0,
@@ -47,7 +47,7 @@ const DataPage = ({ className, year, type,  ...rest }) => {
     };
 
     const handleSave = (event) => {
-        apiPost(values["buildingID"], values["unit"], year, type, values["jan"], values["feb"], values["mar"], values["apr"], values["may"], values["jun"], values["jul"], values["aug"], values["sep"], values["oct"], values["nov"], values["dec"])
+        apiPost(values["buildingID"], values["unit"], year, type, values["jan"], values["feb"], values["mar"], values["apr"], values["may"], values["jun"], values["jul"], values["aug"], values["sep"], values["oct"], values["nov"], values["dec"], values["pv"])
 
     };
 
@@ -59,17 +59,17 @@ const DataPage = ({ className, year, type,  ...rest }) => {
     }
 
     const selectBuilding = async (event) => {
-        var bID = event.target.value;
+        var bID = event.target.value
         setValues({
             ...values,
             buildingID: event.target.value
         })
-
         var url = "http://localhost:8080/api/mrv/" + bID + "-" + type + "-" + year;
         const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
         console.log(response.data)
         setValues({
             ...values,
+            pv: response.data.pv,
             jan: response.data.jan,
             feb: response.data.feb,
             mar: response.data.mar,
@@ -103,7 +103,7 @@ const DataPage = ({ className, year, type,  ...rest }) => {
         console.log(response)
     }
 
-    const apiPost = async (buildingId, unit, year, type, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec) => {
+    const apiPost = async (buildingId, unit, year, type, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, pv) => {
         var url = "http://localhost:8080/api/mrv/transient";
         const response = await axios.post(url, {
             "objectType": "MrvData",
@@ -122,7 +122,8 @@ const DataPage = ({ className, year, type,  ...rest }) => {
             "sep": sep,
             "oct": oct,
             "nov": nov,
-            "dec": dec
+            "dec": dec,
+            "pv": pv
         }, {headers: {'Access-Control-Allow-Origin' : '*','Access-Control-Allow-Headers':'*'}});
         console.log(response.data);
     }
@@ -193,6 +194,23 @@ const DataPage = ({ className, year, type,  ...rest }) => {
                                         Get Building
                                     </Button>
                                 </Box>
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    fullWidth
+                                    label="PV generation on-site (kWh)"
+                                    name="pv"
+                                    onChange={handleChange}
+                                    required
+                                    value={values.pv}
+                                    variant="outlined"
+                                    type="number"
+                                    step="0.01"
+                                />
                             </Grid>
                         </Grid>
                     </CardContent>
@@ -427,8 +445,8 @@ const DataPage = ({ className, year, type,  ...rest }) => {
     );
 };
 
-DataPage.propTypes = {
+ElectricityDataPage.propTypes = {
     className: PropTypes.string
 };
 
-export default DataPage;
+export default ElectricityDataPage;

@@ -1,10 +1,7 @@
 package com.woohoon9.bep.mrv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.woohoon9.bep.mrv.model.BaselineModel;
-import com.woohoon9.bep.mrv.model.BuildingIDNames;
-import com.woohoon9.bep.mrv.model.BuildingInfo;
-import com.woohoon9.bep.mrv.model.Mrv;
+import com.woohoon9.bep.mrv.model.*;
 import org.hyperledger.fabric.gateway.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,6 +226,44 @@ public class App {
         }
 
         return new ResponseEntity<>(resultBaselineModel, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/mrv/building/es/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> getEnergySavings(@PathVariable String id) {
+
+        EnergySavingsList resultEnergySavings = null;
+
+        try{
+
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetESA", id);
+            resultEnergySavings = getMapper().readValue(new String(result, UTF_8), EnergySavingsList.class);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(resultEnergySavings, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/mrv/building/cc/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> getCarbonCredit(@PathVariable String id) {
+
+        CarbonCreditList resultCarbonCredit = null;
+
+        try{
+
+            byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetCCA", id);
+            resultCarbonCredit = getMapper().readValue(new String(result, UTF_8), CarbonCreditList.class);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(resultCarbonCredit, HttpStatus.OK);
     }
 
     private Contract getContract(String channelId, String chaincodeId) throws Exception {

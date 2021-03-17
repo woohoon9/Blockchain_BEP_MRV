@@ -28,25 +28,25 @@ const useStyles = makeStyles(() => ({
 const BaselineModel = ({ className, ...rest }) => {
     const classes = useStyles();
     const [values, setValues] = useState({
-        buildings: [],
+        buildings: [{id:"", name:""}],
         buildingID: '',
-        electricityMMBTU: '',
-        electricityKWH: '',
-        naturalGasMMBTU: '',
-        naturalGasSCF: '',
-        chilledWaterMMBTU: '',
-        chilledWaterKTON: '',
-        steamMMBTU: '',
-        steamKLBS: '',
-        totalMMBTU: '',
-        coalMMBTU: '',
-        gHGNaturalGasMMBTU: '',
-        oilMMBTU: '',
-        coalKG: '',
-        naturalGasKG: '',
-        oilKG: '',
-        totalCO2EKG: '',
-        totalCO2ETON: ''
+        electricityMMBTU: 0,
+        electricityKWH: 0,
+        naturalGasMMBTU: 0,
+        naturalGasSCF: 0,
+        chilledWaterMMBTU: 0,
+        chilledWaterKTON: 0,
+        steamMMBTU: 0,
+        steamKLBS: 0,
+        totalMMBTU: 0,
+        coalMMBTU: 0,
+        gHGNaturalGasMMBTU: 0,
+        oilMMBTU: 0,
+        coalKG: 0,
+        naturalGasKG: 0,
+        oilKG: 0,
+        totalCO2EKG: 0,
+        totalCO2ETON: 0
 
     });
 
@@ -64,7 +64,10 @@ const BaselineModel = ({ className, ...rest }) => {
 
 
     const handleSave = (event) => {
+        console.log(values["buildingID"])
+        console.log(values["electricityMMBTU"])
         apiPost(values["buildingID"], values["electricityMMBTU"], values["electricityKWH"], values["naturalGasMMBTU"], values["naturalGasSCF"], values["chilledWaterMMBTU"], values["chilledWaterKTON"], values["steamMMBTU"], values["steamKLBS"], values["totalMMBTU"], values["coalMMBTU"], values["gHGNaturalGasMMBTU"], values["oilMMBTU"], values["coalKG"], values["naturalGasKG"], values["oilKG"], values["totalCO2EKG"], values["totalCO2ETON"] )
+
     };
 
     const getBuilding = async () => {
@@ -109,6 +112,7 @@ const BaselineModel = ({ className, ...rest }) => {
             "totalCO2ETON": totalCO2ETON
         }, {headers: {'Access-Control-Allow-Origin' : '*','Access-Control-Allow-Headers':'*'}});
         console.log(response.data);
+        alert("Successfully create baseline model")
     }
 
     return (
@@ -196,6 +200,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.electricityMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -212,6 +218,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.electricityKWH}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -227,6 +235,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.naturalGasMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -242,6 +252,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.naturalGasSCF}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -257,6 +269,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.chilledWaterMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -272,6 +286,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.chilledWaterKTON}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -287,6 +303,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.steamMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -302,6 +320,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.steamKLBS}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -317,6 +337,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.totalMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                     </Grid>
@@ -345,6 +367,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.coalMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -360,6 +384,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.gHGNaturalGasMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -375,6 +401,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.oilMMBTU}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                     </Grid>
@@ -403,6 +431,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.coalKG}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -418,6 +448,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.naturalGasKG}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -433,6 +465,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.oilKG}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -448,6 +482,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.totalCO2EKG}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                         <Grid
@@ -463,6 +499,8 @@ const BaselineModel = ({ className, ...rest }) => {
                                 required
                                 value={values.totalCO2ETON}
                                 variant="outlined"
+                                type="number"
+                                step="0.01"
                             />
                         </Grid>
                     </Grid>

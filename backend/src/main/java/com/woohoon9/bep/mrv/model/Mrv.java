@@ -67,6 +67,9 @@ public class Mrv {
     @JsonProperty
     float sum;
 
+    @JsonProperty
+    float pv;
+
     @JsonPOJOBuilder(withPrefix = "")
     public static class MrvBuilder {}
 }

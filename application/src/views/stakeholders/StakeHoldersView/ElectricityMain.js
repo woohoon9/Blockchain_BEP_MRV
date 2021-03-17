@@ -9,8 +9,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Page from "../../../components/Page";
 import Typography from "@material-ui/core/Typography";
-import Data from "./Data";
-import axios from "axios";
+import Data from "./ElectricityData";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
