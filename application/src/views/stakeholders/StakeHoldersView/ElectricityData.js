@@ -64,11 +64,12 @@ const ElectricityDataPage = ({ className, year, type,  ...rest }) => {
             ...values,
             buildingID: event.target.value
         })
-        var url = "http://localhost:8080/api/mrv/" + bID + "-" + type + "-" + year;
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        var url = "http://34.236.242.165:8080/api/mrv/" + bID + "-" + type + "-" + year;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://34.236.242.165:8080',}})
         console.log(response.data)
         setValues({
             ...values,
+            buildingID: bID,
             pv: response.data.pv,
             jan: response.data.jan,
             feb: response.data.feb,
@@ -86,8 +87,8 @@ const ElectricityDataPage = ({ className, year, type,  ...rest }) => {
     }
 
     const getBuilding = async () => {
-        var url = "http://localhost:8080/api/mrv/building/list";
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        var url = "http://34.236.242.165:8080/api/mrv/building/list";
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://34.236.242.165:8080',}})
         console.log(response.data.buildingList)
         setValues({
             ...values,
@@ -98,13 +99,13 @@ const ElectricityDataPage = ({ className, year, type,  ...rest }) => {
     }
 
     const apiGet = async (id) => {
-        var url = "http://localhost:8080/api/mrv/building/info/" + id;
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
+        var url = "http://34.236.242.165:8080/api/mrv/building/info/" + id;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://34.236.242.165:8080',}});
         console.log(response)
     }
 
     const apiPost = async (buildingId, unit, year, type, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, pv) => {
-        var url = "http://localhost:8080/api/mrv/transient";
+        var url = "http://34.236.242.165:8080/api/mrv/transient";
         const response = await axios.post(url, {
             "objectType": "MrvData",
             "id":buildingId,

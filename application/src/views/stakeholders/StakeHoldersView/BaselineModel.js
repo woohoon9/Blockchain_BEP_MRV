@@ -67,8 +67,8 @@ const BaselineModel = ({ className, ...rest }) => {
         })
 
 
-        var url = "http://localhost:8080/api/mrv/building/baseline/" + bID;
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
+        var url = "http://34.236.242.165:8080/api/mrv/building/baseline/" + bID;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://34.236.242.165:8080',}});
         console.log(response.data)
 
         setValues({
@@ -108,8 +108,8 @@ const BaselineModel = ({ className, ...rest }) => {
     };
 
     const getBuilding = async () => {
-        var url = "http://localhost:8080/api/mrv/building/list";
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        var url = "http://34.236.242.165:8080/api/mrv/building/list";
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://34.236.242.165:8080',}})
         console.log(response.data.buildingList)
         setValues({
             ...values,
@@ -120,14 +120,14 @@ const BaselineModel = ({ className, ...rest }) => {
     }
 
     const apiGet = async (id) => {
-        var url = "http://localhost:8080/api/mrv/building/baseline/" + id;
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
+        var url = "http://34.236.242.165:8080/api/mrv/building/baseline/" + id;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://34.236.242.165:8080',}});
         console.log(response)
         // await this.setState({argValue: response.data});
     }
 
     const apiPost = async (buildingId, electricityMMBTU, electricityKWH, naturalGasMMBTU, naturalGasSCF, chilledWaterMMBTU, chilledWaterKTON, steamMMBTU, steamKLBS, totalMMBTU, coalMMBTU, gHGNaturalGasMMBTU, oilMMBTU, coalKG, naturalGasKG, oilKG, totalCO2EKG, totalCO2ETON ) => {
-        var url = "http://localhost:8080/api/mrv/building/baseline";
+        var url = "http://34.236.242.165:8080/api/mrv/building/baseline";
         const response = await axios.post(url, {
             "objectType": "BuidlingModel",
             "id": buildingId,

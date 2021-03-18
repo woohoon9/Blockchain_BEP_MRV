@@ -57,8 +57,8 @@ const EnergyAuditorsView = () => {
     }
 
     const getBuilding = async () => {
-        var url = "http://localhost:8080/api/mrv/building/list";
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        var url = "http://34.236.242.165:8080/api/mrv/building/list";
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://34.236.242.165:8080',}})
         console.log(response.data.buildingList)
         setValues({
             ...values,
@@ -69,8 +69,8 @@ const EnergyAuditorsView = () => {
     }
 
     const getData = async (id) => {
-        var url = "http://localhost:8080/api/mrv/building/es/" + id;
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
+        var url = "http://34.236.242.165:8080/api/mrv/building/es/" + id;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://34.236.242.165:8080',}})
         console.log(response.data.esList)
         setValues({
             ...values,

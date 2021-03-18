@@ -43,14 +43,14 @@ const BuildingInformation = ({ className, ...rest }) => {
     };
 
     const apiGet = async (id) => {
-        var url = "http://localhost:8080/api/mrv/building/info/" + id;
-        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
+        var url = "http://34.236.242.165:8080/api/mrv/building/info/" + id;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://34.236.242.165:8080',}});
         console.log(response)
         // await this.setState({argValue: response.data});
     }
 
     const apiPost = async (buildingId, buildingName, buildingNumber, buildingAddress, substantialCompletion, greenBuildingCertificate) => {
-        var url = "http://localhost:8080/api/mrv/building/info";
+        var url = "http://34.236.242.165:8080/api/mrv/building/info";
         const response = await axios.post(url, {
             "objectType": "BuildingInfo",
             "id":buildingId,
