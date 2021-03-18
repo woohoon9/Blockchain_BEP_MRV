@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+	"math"
 )
 
 // SmartContract provides functions for managing an Mrv
@@ -504,20 +505,23 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 			mrvKey := buildingID + "-" +  energyType+ "-" + year
 			mrv := mrvData[mrvKey]
 
+			formattedSum := math.Round(mrv.Sum * 100) /100
+
 			fmt.Println(mrvKey)
 			fmt.Println(mrv)
 			switch energyType {
 			case "electricity" :
-				es.Electricity = mrv.Sum
+				es.Electricity = formattedSum
 				totalElec = totalElec + mrv.Sum
+
 			case "naturalGas" :
-				es.NaturalGas = mrv.Sum
+				es.NaturalGas = formattedSum
 				totalNaturalGas = totalNaturalGas + mrv.Sum
 			case "chilledWater" :
-				es.ChilledWater = mrv.Sum
+				es.ChilledWater = formattedSum
 				totalChilledWater = totalChilledWater + mrv.Sum
 			case "steam" :
-				es.Steam = mrv.Sum
+				es.Steam = formattedSum
 				totalSteam = totalSteam + mrv.Sum
 			}
 		}
@@ -526,7 +530,7 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 
 	}
 
-	totalMrv := ESAByOne{"Total Savings", totalElec, totalNaturalGas, totalChilledWater, totalSteam, 0}
+	totalMrv := ESAByOne{"Total Savings", (math.Round(totalElec * 100) / 100), (math.Round(totalNaturalGas * 100)/100), (math.Round(totalChilledWater * 100)/100), (math.Round(totalSteam * 100) /100), 0}
 	mrvDataList = append(mrvDataList, totalMrv)
 	esas.ESAList = mrvDataList
 

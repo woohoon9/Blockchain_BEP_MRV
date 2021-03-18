@@ -11,14 +11,15 @@ import {
     Divider,
     Grid,
     TextField,
-    makeStyles
+    makeStyles, Avatar, Typography, Checkbox
 } from '@material-ui/core';
+import getInitials from "../../../utils/getInitials";
 
 const useStyles = makeStyles(() => ({
     root: {}
 }));
 
-const BuildingInformation = ({ className, ...rest }) => {
+const VerficationStatus = ({ className, ...rest }) => {
     const classes = useStyles();
     const [values, setValues] = useState({
         buildings: [],
@@ -114,8 +115,7 @@ const BuildingInformation = ({ className, ...rest }) => {
         >
             <Card>
                 <CardHeader
-                    subheader="The information can be edited"
-                    title="Building Information"
+                    title="Verification Status"
                 />
                 <Divider />
                 <CardContent>
@@ -125,54 +125,62 @@ const BuildingInformation = ({ className, ...rest }) => {
                     >
                         <Grid
                             item
-                            md={6}
-                            xs={12}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Select Building"
-                                name="buildingID"
-                                onChange={selectBuilding}
-                                required
-                                select
-                                SelectProps={{ native: true }}
-                                value={values.buildingID}
-                                variant="outlined"
-                            >
-                                {values.buildings.map((option) => (
-                                    <option
-                                        key={option.id}
-                                        value={option.id}
-                                    >
-                                        {option.name}
-                                    </option>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid
-                            item
-                            md={6}
+                            md={4}
                             xs={12}
                         >
                             <Box
+                                alignItems="center"
                                 display="flex"
-                                justifyContent="flex-end"
-                                p={2}
                             >
                                 <Button
                                     color="primary"
                                     variant="contained"
-                                    onClick={getBuilding}
                                 >
-                                    Get Building
+                                    Energy Savings Verification
                                 </Button>
                             </Box>
                         </Grid>
-
+                        <Grid
+                            item
+                            md={4}
+                            xs={12}
+                        >
+                            <Box
+                                alignItems="center"
+                                display="flex"
+                            >
+                                <Typography
+                                    color="textPrimary"
+                                    variant="body1"
+                                >
+                                    Status
+                                </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid
+                            item
+                            md={4}
+                            xs={12}
+                        >
+                            <Box
+                                alignItems="center"
+                                display="flex"
+                            >
+                                <Checkbox
+                                    checked={1}
+                                    value="true"
+                                />
+                                <Typography
+                                    color="textPrimary"
+                                    variant="body1"
+                                >
+                                   Completed
+                                </Typography>
+                            </Box>
+                        </Grid>
                     </Grid>
-
-
                 </CardContent>
+                <Divider />
                 <CardContent>
                     <Grid
                         container
@@ -180,104 +188,69 @@ const BuildingInformation = ({ className, ...rest }) => {
                     >
                         <Grid
                             item
-                            md={12}
+                            md={4}
                             xs={12}
                         >
-                            <TextField
-                                fullWidth
-                                helperText="Please specify the building name"
-                                label="Building name"
-                                name="buildingName"
-                                onChange={handleChange}
-                                required
-                                value={values.buildingName}
-                                variant="outlined"
-                            />
+                            <Box
+                                alignItems="center"
+                                display="flex"
+                            >
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                >
+                                    CO2 Emission Verification
+                                </Button>
+                            </Box>
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={4}
                             xs={12}
                         >
-                            <TextField
-                                fullWidth
-                                helperText="Please specify the building number"
-                                label="Building Number"
-                                name="buildingNumber"
-                                onChange={handleChange}
-                                required
-                                value={values.buildingNumber}
-                                variant="outlined"
-                            />
+                            <Box
+                                alignItems="center"
+                                display="flex"
+                            >
+                                <Typography
+                                    color="textPrimary"
+                                    variant="body1"
+                                >
+                                    Status
+                                </Typography>
+                            </Box>
                         </Grid>
                         <Grid
                             item
-                            md={12}
+                            md={4}
                             xs={12}
                         >
-                            <TextField
-                                fullWidth
-                                label="Address"
-                                name="address"
-                                onChange={handleChange}
-                                required
-                                value={values.address}
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid
-                            item
-                            md={12}
-                            xs={12}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Substantial Completion"
-                                name="substantialCompletion"
-                                onChange={handleChange}
-                                required
-                                value={values.substantialCompletion}
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid
-                            item
-                            md={12}
-                            xs={12}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Green Building Certificate"
-                                name="greenBuildingCertificate"
-                                onChange={handleChange}
-                                required
-                                value={values.greenBuildingCertificate}
-                                variant="outlined"
-                            />
+                            <Box
+                                alignItems="center"
+                                display="flex"
+                            >
+                                <Checkbox
+                                    checked={1}
+                                    value="true"
+                                />
+                                <Typography
+                                    color="textPrimary"
+                                    variant="body1"
+                                >
+                                    Completed
+                                </Typography>
+                            </Box>
                         </Grid>
                     </Grid>
                 </CardContent>
                 <Divider />
-                <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    p={2}
-                >
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={handleSave}
-                    >
-                        Save
-                    </Button>
-                </Box>
             </Card>
         </form>
     );
 };
 
-BuildingInformation.propTypes = {
+VerficationStatus.propTypes = {
     className: PropTypes.string
 };
 
-export default BuildingInformation;
+export default VerficationStatus;

@@ -58,6 +58,43 @@ const BaselineModel = ({ className, ...rest }) => {
         });
     };
 
+    const selectBuilding = async (event) => {
+        var bID = event.target.value;
+        console.log(bID)
+        await setValues({
+            ...values,
+            buildingID: event.target.value
+        })
+
+
+        var url = "http://localhost:8080/api/mrv/building/baseline/" + bID;
+        const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin' : 'http://localhost:8080',}});
+        console.log(response.data)
+
+        setValues({
+            ...values,
+            buildingID: bID,
+            electricityMMBTU: response.data.electricityMMBTU,
+            electricityKWH: response.data.electricityKWH,
+            naturalGasMMBTU: response.data.naturalGasMMBTU,
+            naturalGasSCF: response.data.naturalGasSCF,
+            chilledWaterMMBTU: response.data.chilledWaterMMBTU,
+            chilledWaterKTON: response.data.chilledWaterKTON,
+            steamMMBTU: response.data.steamMMBTU,
+            steamKLBS: response.data.steamKLBS,
+            totalMMBTU: response.data.totalMMBTU,
+            coalMMBTU: response.data.coalMMBTU,
+            gHGNaturalGasMMBTU: response.data.gHGNaturalGasMMBTU,
+            oilMMBTU: response.data.oilMMBTU,
+            coalKG: response.data.coalKG,
+            naturalGasKG: response.data.naturalGasKG,
+            oilKG: response.data.oilKG,
+            totalCO2EKG: response.data.totalCO2EKG,
+            totalCO2ETON: response.data.totalCO2ETON
+        })
+
+    }
+
     const loadData = (event) => {
         console.log("loadData")
     };
@@ -75,6 +112,7 @@ const BaselineModel = ({ className, ...rest }) => {
         const response = await axios.get(url, {headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}})
         console.log(response.data.buildingList)
         setValues({
+            ...values,
             buildings: response.data.buildingList
         })
 
@@ -128,12 +166,37 @@ const BaselineModel = ({ className, ...rest }) => {
                     title="Baseline Energy Consumption"
                 />
                 <Divider />
-
-                <Card>
-                    <CardHeader
-                        title="Select Building"
-                    />
-                    <CardContent>
+                <CardContent>
+                    <Grid
+                        container
+                        spacing={3}
+                    >
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Select Building"
+                                name="buildingID"
+                                onChange={selectBuilding}
+                                required
+                                select
+                                SelectProps={{ native: true }}
+                                value={values.buildingID}
+                                variant="outlined"
+                            >
+                                {values.buildings.map((option) => (
+                                    <option
+                                        key={option.id}
+                                        value={option.id}
+                                    >
+                                        {option.name}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </Grid>
                         <Grid
                             item
                             md={6}
@@ -153,34 +216,12 @@ const BaselineModel = ({ className, ...rest }) => {
                                 </Button>
                             </Box>
                         </Grid>
-                        <Grid
-                            item
-                            md={6}
-                            xs={12}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Select Building"
-                                name="buildingID"
-                                onChange={handleChange}
-                                required
-                                select
-                                SelectProps={{ native: true }}
-                                value={values.buildingID}
-                                variant="outlined"
-                            >
-                                {values.buildings.map((option) => (
-                                    <option
-                                        key={option.id}
-                                        value={option.id}
-                                    >
-                                        {option.name}
-                                    </option>
-                                ))}
-                            </TextField>
-                        </Grid>
-                    </CardContent>
-                </Card>
+
+                    </Grid>
+
+
+                </CardContent>
+
                 <CardContent>
                     <Grid
                         container

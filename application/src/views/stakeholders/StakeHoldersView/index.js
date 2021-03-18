@@ -13,6 +13,7 @@ import axios from 'axios';
 import BuildingInformation from './BuildingInformation';
 import BaselineModel from './BaselineModel';
 import Measurement from './Measurement';
+import VerificationStatus from './VerificationStatus'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,6 +75,7 @@ const Stakeholders = () => {
                     <Tab label="Building Information" {...a11yProps(0)} />
                     <Tab label="Baseline Model" {...a11yProps(1)} />
                     <Tab label="Measurement" {...a11yProps(2)} />
+                    <Tab label="Verification Status" {...a11yProps(3)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -84,6 +86,9 @@ const Stakeholders = () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Measurement />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <VerificationStatus />
             </TabPanel>
         </Page>
     );

@@ -95,7 +95,7 @@ const Results = ({ className, customers, ...rest }) => {
                     Oil
                 </TableCell>
                 <TableCell>
-                    GHG Emissions Reduction
+                    CO2 Emission Reductions (Ton)
                 </TableCell>
               </TableRow>
             </TableHead>

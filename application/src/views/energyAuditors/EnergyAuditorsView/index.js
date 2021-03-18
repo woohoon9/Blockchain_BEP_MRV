@@ -74,6 +74,7 @@ const EnergyAuditorsView = () => {
         console.log(response.data.esList)
         setValues({
             ...values,
+            buildingID: id,
             customers: response.data.esList
         })
 

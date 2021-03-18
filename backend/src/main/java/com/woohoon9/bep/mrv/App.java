@@ -19,7 +19,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -238,6 +240,18 @@ public class App {
 
             byte[] result = getContract(channelName, chaincodeName).submitTransaction("GetESA", id);
             resultEnergySavings = getMapper().readValue(new String(result, UTF_8), EnergySavingsList.class);
+
+            EnergySavingsList tempESList = new EnergySavingsList();
+            List<EnergySavings> esList = new ArrayList<>();
+            for(int i=0;i<resultEnergySavings.getEsList().size();i++){
+
+                EnergySavings tempES = resultEnergySavings.getEsList().get(i);
+                EnergySavings es = new EnergySavings();
+                es.setElectricity(tempES.getElectricity());
+
+
+
+            }
 
         }catch(Exception e){
             e.printStackTrace();
