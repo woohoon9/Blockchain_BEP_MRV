@@ -504,8 +504,6 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 	var totalSavings float64 = 0;
 	for _, year := range years{
 
-		totalSavings = 0
-
 		es:= ESAByOne{}
 		es.Item = year + " year (MMBTU)"
 		var pvValue float64 = 0;
