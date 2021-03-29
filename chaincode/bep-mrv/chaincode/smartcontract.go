@@ -112,6 +112,8 @@ type ResultStatus struct {
 	Status 	string `json:"status"`
 }
 
+const kwhPerMMBTU float64 = 293.07107
+
 // CreateMrv issue MRV data
 func (s *SmartContract) CreateMrv(ctx contractapi.TransactionContextInterface, id string) error {
 
@@ -478,7 +480,7 @@ func (s *SmartContract) GetESA(ctx contractapi.TransactionContextInterface, buil
 	baseline := ESAByOne{"Baseline (MMBTU)", baselineModel.ElectricityMMBTU, baselineModel.NaturalGasMMBTU, baselineModel.ChilledWaterMMBTU, baselineModel.SteamMMBTU, 0}
 	mrvDataList = append(mrvDataList, baseline)
 
-	returnedEsas, err := s.calES(ctx, esas, mrvDataMap, buildingID)
+	returnedEsas, err := s.calES(ctx, esas, mrvDataMap, buildingID, baselineModel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get calculated EnergySaings data: %v", err)
 	}
@@ -486,9 +488,12 @@ func (s *SmartContract) GetESA(ctx contractapi.TransactionContextInterface, buil
 	return returnedEsas, nil
 }
 
-func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas ESAs, mrvData map[string]Mrv, buildingID string) (*ESAs, error) {
+func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas ESAs, mrvData map[string]Mrv, buildingID string, baselineModel BaselineModel) (*ESAs, error) {
 
 	mrvDataList := esas.ESAList
+
+	baselineModelES := ESAByOne{Item: "BaselineModel", Electricity: baselineModel.ElectricityMMBTU, NaturalGas: baselineModel.NaturalGasMMBTU, ChilledWater: baselineModel.ChilledWaterMMBTU, Steam: baselineModel.SteamMMBTU, EnergySavings: 0}
+	mrvDataList = append(mrvDataList,baselineModelES)
 	var years = []string{"First", "Second", "Third","Fourth", "Fifth"}
 	var energyTypes = []string{"electricity", "naturalGas", "chilledWater", "steam"}
 
@@ -496,10 +501,14 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 	var totalNaturalGas float64
 	var totalChilledWater float64
 	var totalSteam float64
+	var totalSavings float64 = 0;
 	for _, year := range years{
+
+		totalSavings = 0
 
 		es:= ESAByOne{}
 		es.Item = year + " year (MMBTU)"
+		var pvValue float64 = 0;
 
 		for _, energyType := range energyTypes{
 			mrvKey := buildingID + "-" +  energyType+ "-" + year
@@ -511,6 +520,7 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 			fmt.Println(mrv)
 			switch energyType {
 			case "electricity" :
+				pvValue = mrv.PV
 				es.Electricity = formattedSum
 				totalElec = totalElec + mrv.Sum
 
@@ -526,11 +536,36 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 			}
 		}
 
+		es.EnergySavings = (baselineModel.ElectricityMMBTU + baselineModel.ChilledWaterMMBTU + baselineModel.NaturalGasMMBTU + baselineModel.SteamMMBTU) - (es.Electricity + es.ChilledWater + es.NaturalGas) - (pvValue / kwhPerMMBTU)
+		es.EnergySavings = math.Round(es.EnergySavings * 100) /100
+		totalSavings = totalSavings + es.EnergySavings
+		fmt.Print("baselineModelSum value: ")
+		fmt.Print(baselineModel.ElectricityMMBTU + baselineModel.ChilledWaterMMBTU + baselineModel.NaturalGasMMBTU + baselineModel.SteamMMBTU)
+		fmt.Println("")
+		fmt.Println("")
+
+		fmt.Print("Usage: ")
+		fmt.Print(es.Electricity + es.ChilledWater + es.NaturalGas)
+		fmt.Println("")
+		fmt.Println("")
+
+
+		fmt.Print("PV: ")
+		fmt.Print(pvValue / kwhPerMMBTU)
+		fmt.Println("")
+		fmt.Println("")
+
+
+
+		fmt.Print("EnergySavings value: ")
+		fmt.Print(es.EnergySavings)
+		fmt.Println("")
+
 		mrvDataList = append(mrvDataList, es)
 
 	}
 
-	totalMrv := ESAByOne{"Total Savings", (math.Round(totalElec * 100) / 100), (math.Round(totalNaturalGas * 100)/100), (math.Round(totalChilledWater * 100)/100), (math.Round(totalSteam * 100) /100), 0}
+	totalMrv := ESAByOne{"Total Savings", (math.Round(totalElec * 100) / 100), (math.Round(totalNaturalGas * 100)/100), (math.Round(totalChilledWater * 100)/100), (math.Round(totalSteam * 100) /100), totalSavings}
 	mrvDataList = append(mrvDataList, totalMrv)
 	esas.ESAList = mrvDataList
 
