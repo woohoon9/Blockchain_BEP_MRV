@@ -563,7 +563,7 @@ func (s *SmartContract) calES(ctx contractapi.TransactionContextInterface, esas 
 
 	}
 
-	totalMrv := ESAByOne{"Total Savings", (math.Round(totalElec * 100) / 100), (math.Round(totalNaturalGas * 100)/100), (math.Round(totalChilledWater * 100)/100), (math.Round(totalSteam * 100) /100), totalSavings}
+	totalMrv := ESAByOne{"Total Savings", (math.Round(totalElec * 100) / 100), (math.Round(totalNaturalGas * 100)/100), (math.Round(totalChilledWater * 100)/100), (math.Round(totalSteam * 100) /100), (math.Round(totalSavings * 100) / 100)}
 	mrvDataList = append(mrvDataList, totalMrv)
 	esas.ESAList = mrvDataList
 
